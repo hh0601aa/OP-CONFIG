@@ -1,0 +1,9 @@
+local Blacklist = {
+    ["DiscordID1"] = true,
+    
+    ["DiscordID2"] = true,
+    
+    ["DiscordID3"] = true
+    ,
+    ["DiscordID4"] = true,
+}

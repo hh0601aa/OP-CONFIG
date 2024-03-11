@@ -1,0 +1,35 @@
+local DataStoreService = game:GetService("DataStoreService")
+local BlacklistDataStore = DataStoreService:GetDataStore("BlacklistData")
+
+local function isBlacklisted(userId)
+    local success, isBlacklisted = pcall(function()
+        return BlacklistDataStore:GetAsync(tostring(userId))
+    end)
+    
+    if success then
+        return isBlacklisted or false
+    else
+        warn("Failed to check blacklist for user " .. userId)
+        return false
+    end
+end
+
+local function blacklistUser(userId)
+    local success, error = pcall(function()
+        BlacklistDataStore:SetAsync(tostring(userId), true)
+    end)
+    
+    if not success then
+        warn("Failed to blacklist user " .. userId)
+    end
+end
+
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        if message:lower() == "/bedwars" then
+            if isBlacklisted(player.UserId) then
+                player:Kick("You were blacklisted from ArticClient")
+            end
+        end
+    end)
+end)
